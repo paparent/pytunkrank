@@ -5,7 +5,7 @@ pytunkrank
 An interface to TunkRank API
 """
 
-import urllib
+from urllib import FancyURLopener
 
 try:
     import json
@@ -16,6 +16,11 @@ except ImportError:
         raise Exception("A JSON parser is required, e.g., simplejson at " \
                         "http://pypi.python.org/pypi/simplejson/")
 
+
+version_info = (0, 2)
+__version__ = ".".join(map(str, version_info))
+
+
 _BASE_URI = "http://www.tunkrank.com"
 
 
@@ -23,9 +28,16 @@ class TunkRankError(Exception):
     pass
 
 
+class PyTROpener(FancyURLopener):
+    version = 'pytunkrank/%s' % (__version__,)
+
+
+urlopen = PyTROpener().open
+
+
 def score(username):
     try:
-        u = urllib.urlopen(_BASE_URI + "/score/%s.json" % (username,))
+        u = urlopen(_BASE_URI + "/score/%s.json" % (username,))
         data = json.loads(u.read())
         return data['twitter_user']
     except:
@@ -42,7 +54,7 @@ def raw_score(username):
 
 def refresh(username):
     try:
-        u = urllib.urlopen(_BASE_URI + "/refresh/%s.json" % (username,))
+        u = urlopen(_BASE_URI + "/refresh/%s.json" % (username,))
         data = json.loads(u.read())
         return data['refresh']
     except:
