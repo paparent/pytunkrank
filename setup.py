@@ -1,7 +1,7 @@
 import os
 from distutils.core import setup
 
- from pytunkrank import __version__
+from pytunkrank import __version__
 
 setup(name='pytunkrank',
       version=__version__,
